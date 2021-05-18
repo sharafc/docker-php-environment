@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+    nginx:
+        container_name: nginx
+        build:
+            context: ./nginx
+        ports:
+            - "8080:80"
+        tty: true
+        volumes:
+            - ./app:/var/www
+            - ./nginx/conf.d:/etc/nginx/conf.d
+        networks:
+            - web-network
+
+    php-cli:
+        container_name: php-cli
+        build:
+            context: ./php-cli
+        tty: true
+        volumes:
+            - ./app:/var/www
+        networks:
+            - web-network
+
+    php-fpm:
+        container_name: php-fpm
+        build:
+            context: ./php-fpm
+        tty: true
+        volumes:
+            - ./app:/var/www
+        networks:
+            - web-network
+
+networks:
+    web-network:
